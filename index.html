@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory managment system</title>
+    <link rel="stylesheet" href="assets/style/style.css">
+
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/brands.min.css" integrity="sha512-58P9Hy7II0YeXLv+iFiLCv1rtLW47xmiRpC1oFafeKNShp8V5bKV/ciVtYqbk2YfxXQMt58DjNfkXFOn62xE+g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- line -chart -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Categories', 'Total no. of items'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Inventory Details',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+    <!-- pi-chart -->
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Language', 'Speakers (in millions)'],
+          ['Clothes',  5.85],
+          ['Grossary',  1.66],
+          ['Italian', 0.316],
+          ['Romansh', 0.0791]
+        ]);
+
+      var options = {
+        legend: 'none',
+        pieSliceText: 'label',
+        title: 'Categories value',
+        pieStartAngle: 100,
+      };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+      }
+    </script>
+
+</head>
+<body>
+
+  <!-- popups -->
+  <ul class="pop-ups">
+
+  </ul>
+
+
+  
+  <div class="container">
+    <p id="close">&times;</p>
+    <div class="edit-card">
+      <h3 class="headers">Edit inventory</h3>
+      <input type="text" id="name" placeholder="Enter product name" required>
+      <input type="number" id="perPrice" placeholder="Enter per. unit price" required>
+      <input type="number" id="qtyNumber" placeholder="Enter quantity" required>
+      <button id="addCutsomer">Apply changes</button>
+  </div>
+  </div>
+    
+    <!-- header -->
+        <div class="header">
+            <p class="name">InvTracker.</p>
+            <div class="user">
+                <img src="images/user-Image.png" alt="" class="user-icon">
+                <p class="user-name">Faizan</p>
+            </div>
+        </div>
+
+        <!-- main container -->
+        <div class="main-container">
+                <div class="left-container">
+                  <div class="icons">
+                    <div class="icon">
+                        <ion-icon name="home-outline"></ion-icon>
+                        <p class="icon-name"  id="icon-name">Dashboard</p>
+                    </div>
+                    <div class="icon">
+                        <ion-icon name="bag-handle-outline"></ion-icon>
+                        <p class="icon-name"  id="icon-name">Inventory</p>
+                    </div>
+                    <div class="icon">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        <p class="icon-name"  id="icon-name">Add item</p>
+                    </div>
+                </div>
+                
+                </div>
+
+                <div class="right-container">
+                  <div class="sub-right">
+                    <div class="dashboard">
+                            <div class="frame">
+                                        <img src="images/box (3).png" alt="" id="icon">
+                                        <div class="txt">
+                                                <p>Total items</p>
+                                                <p id="t-item">0</p>
+                                        </div>
+                            </div>
+
+                            <div class="frame">
+                              <img src="images/categories.png" alt="" id="icon">
+                                <div class="txt">
+                                        <p>Categories</p>
+                                        <p id="cat">0</p>
+                                </div>
+                    </div>
+                    
+
+                    <div class="frame">
+                        <img src="images/stock-market.png" alt="" id="icon">
+                        <div class="txt">
+                                <p>Low stock</p>
+                                <p id="stock-val">0</p>
+                        </div>
+            </div>
+
+                                <div class="frame">
+                                    <img src="images/badge.png" alt="" id="icon">
+                                    <div class="txt">
+                                            <p>Top category</p>
+                                            <p id="cat-val"></p>
+                                    </div>
+                        </div>
+
+                            <div class="frame">
+                                <img src="images/dollar.png" alt="" id="icon">
+                                <div class="txt">
+                                        <p>Total amount</p>
+                                        <p id="t-amt">0</p>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="graphs">
+                            <div class="graph-lines">
+                                    <div id="curve_chart" class="line"></div>
+                            </div>
+                            <div class="pi-chart">
+                                <div id="piechart" class="pi"></div>
+                                <div class="details">
+                                      <!-- renderind details to the dashboard using javascript -->
+                                </div>
+                            </div>
+                    </div>
+
+
+                    <!-- table -->
+
+                    <div class="table-container">
+
+                        <h3>Low stock items</h3>
+                        <table id="td1">
+                          <thead>
+                            <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit Price</th>
+                            <th>Amount</th>
+                            <th>Stock</th>
+                            </tr>
+                          </thead>
+                          <tbody id="td1-tbody">
+                              <!-- rendering table from the javascript -->
+                          </tbody>
+                        </table>
+                      </div>
+        </div>
+                      
+
+                      <!-- Inventory -->
+
+                      <div class="inventory">
+                        <div class="in-header">
+                          <p>Inventory</p>
+                          <img src="images/checklists (1).png" alt="">
+                        </div>
+
+                        <div class="search-section">
+                          <select name="" id="inse">
+                            <option value="" selected>All categories</option>
+                          </select>
+                          <div class="search">
+                          <input type="text" class="searchVal" placeholder="Filter inventory">
+                          <ion-icon name="search-outline" id="fil-btn"></ion-icon>
+                          </div>
+
+                    </div>
+                    <div class="table-container">
+                      <table id="in-table">
+                        <thead>
+                          <tr>
+                            <th>Ord. Id</th>
+                            <th>Item Name</th>
+                            <th>Item Image</th>
+                            <th>Per. unit price</th>
+                            <th>Category</th>
+                            <th>Qty</th>
+                            <th>Total Amount</th>
+                            <!-- <th>Instock</th> -->
+                            <th>Operations</th>
+                          </tr>
+                        </thead>
+                        <tbody id="in-table-body">
+                            <!-- rendering table from the javascript -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  
+                
+                  <div class="add-items-iv">
+                    <div class="in-header">
+                      <p>Add items to inventory</p>
+                      <img src="images/add.png" alt="">
+                    </div>
+                    <div class="add">
+
+                      <div class="upload">
+                        <img id="imagePreview" alt="Your Image Will Appear Here">
+                        <input type="file" id="imageUpload" accept="image/*" placeholder="r">
+                      </div>
+                      <div class="inventory-form">
+                              <input type="number" id="id" placeholder="Enter Id" readonly>
+                              <input type="text" id="prName" placeholder="Enter name" required>
+                              <input type="text" id="name-ctgry" placeholder="Enter Category name">
+                              <input type="text" id="per-price" placeholder="Enter per unit price">
+                              <input type="text" id="total-unit" placeholder="Enter total units">
+                              <button id="add">Add to inventory</button>
+                      </div>
+                      </div>
+                  </div>
+              </div>    
+            </div>
+
+    <script src="assets/script/script.js"></script>
+
+    <!-- ion-icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
