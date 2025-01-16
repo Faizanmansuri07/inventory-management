@@ -82,13 +82,20 @@
     <p id="close">&times;</p>
     <div class="edit-card">
       <h3 class="headers">Edit inventory</h3>
+      
+      <label for="name">Product Name:</label>
       <input type="text" id="name" placeholder="Enter product name" required>
+      
+      <label for="perPrice">Price per Unit:</label>
       <input type="number" id="perPrice" placeholder="Enter per. unit price" required>
+      
+      <label for="qtyNumber">Quantity:</label>
       <input type="number" id="qtyNumber" placeholder="Enter quantity" required>
-      <button id="addCutsomer">Apply changes</button>
+      
+      <button id="editBtn">Apply changes</button>
+    </div>
   </div>
-  </div>
-    
+  
     <!-- header -->
         <div class="header">
             <p class="name">InvTracker.</p>
@@ -253,11 +260,10 @@
                         <input type="file" id="imageUpload" accept="image/*" placeholder="r">
                       </div>
                       <div class="inventory-form">
-                              <input type="number" id="id" placeholder="Enter Id" readonly>
                               <input type="text" id="prName" placeholder="Enter name" required>
                               <input type="text" id="name-ctgry" placeholder="Enter Category name">
-                              <input type="text" id="per-price" placeholder="Enter per unit price">
-                              <input type="text" id="total-unit" placeholder="Enter total units">
+                              <input type="number" id="per-price" placeholder="Enter per unit price">
+                              <input type="number" id="total-unit" placeholder="Enter total units">
                               <button id="add">Add to inventory</button>
                       </div>
                       </div>
