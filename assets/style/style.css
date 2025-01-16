@@ -101,6 +101,7 @@ popups
     display: flex;
     flex-direction: column;
     gap: 20px;
+    z-index: 4;
 }
 .pop-ups  .pop {
     position: relative;
@@ -113,7 +114,6 @@ popups
     padding: 15px 0px;
     gap: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
-
 
 }
 .pop-ups .pop  img {
@@ -445,8 +445,19 @@ table
     font-weight: bold;
     color: #333;
   }
-
-
+#td1-tbody #num{
+}
+  #td1-tbody img {
+    width: 40px;
+  }
+  #td1-tbody tr #num p{
+    border: 2px dotted red;
+    text-align: center;
+    width: 60px;
+    padding: 3px 0px;
+    border-radius: 20px;
+    color: red;
+  }
 /* ===================
 inventory
 =================== */

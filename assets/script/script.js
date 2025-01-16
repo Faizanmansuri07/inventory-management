@@ -182,13 +182,16 @@ function renderInventoryTable(product, index) {
             <td><img src="${product.image}" id="in-img"></td>
             <td>${product.unitprice} ₹</td>
             <td class="ctgry">${product.category}</td>
-            <td>${product.unitprice}</td>
+            <td>${product.totalunit}</td>
             <td>${product.unitprice * product.totalunit} ₹</td>
             <td class="ops">
                 <div class="op" id="op1" onclick="showEditTab(${index})"><ion-icon name="create-outline"></ion-icon></div>
                 <div class="op" id="op2" onclick="removeItem(${index})"><ion-icon name="close-outline"></ion-icon></div>
             </td>
         `;
+        if(product.totalunit < 13) {
+            LowInventory(product)
+        }
         inventoryTableBody.appendChild(tr);
         console.log(tr);
 }
@@ -218,20 +221,72 @@ function randerCategories() {
     }
 }
 
+function LowInventory(product) {
+    const tr = document.createElement("tr")
+    tr.innerHTML = `
+          <tr>
+                <th><img src="${product.image}"></th>
+                <th>${product.name}</th>
+                <th>${product.category}</th>
+                <th>${product.unitprice}</th>
+                <th>${product.unitprice * product.totalunit}</th>
+                <th id="num"><p>${product.totalunit}</p></th>
+            </tr>
+    `;
+    td1body.append(tr)
+}
+
 function filterInventory(e) {
-    const selectValue = selectoption.value
-    const allTableRow = document.querySelectorAll("#in-table-body tr")
-    console.log(allTableRow);
+    const selectValue = selectoption.value;
+    const allTableRow = document.querySelectorAll("#in-table-body tr");
+    
+    // Clear the low inventory table
+    td1body.innerHTML = "";
+
     allTableRow.forEach((item) => {
         const status = item.dataset.status;
-        console.log(status,selectValue)
-        if(selectValue === status || selectValue === "All") {
-            item.style.display = "table-row"; 
-            console.log(1);
+        
+        // Show or hide the table rows based on the filter
+        if (selectValue === status || selectValue === "All") {
+            item.style.display = "table-row";
+
+            // Check if the product qualifies as low inventory
+            const totalUnits = parseInt(item.querySelector("td:nth-child(6)").textContent, 10);
+            if (totalUnits < 13) {
+                const product = {
+                    name: item.querySelector("td:nth-child(2)").textContent,
+                    image: item.querySelector("img").src,
+                    category: item.querySelector("td:nth-child(5)").textContent,
+                    unitprice: parseFloat(item.querySelector("td:nth-child(4)").textContent.replace("₹", "").trim()),
+                    totalunit: totalUnits,
+                };
+                LowInventory(product);
+            }
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function inputFilter() {
+    const input = searchText.value
+    const items = document.querySelectorAll("#in-table-body tr")
+if(input) {
+    items.forEach((item) => {
+        const name = item.querySelector("td:nth-child(2)").textContent
+        console.log(name);
+        
+        if(name === input) {
+            item.style.display = "table-row";
+
         }   else {
             item.style.display = "none"
         }
     })
+} else {
+    createPopUp(popupsObj.pop2, imgLink.pop2);
+    
+}
 }
 
 
@@ -248,5 +303,5 @@ selectoption.addEventListener('change', (e) => {
 // =====================
 
 addBtn.addEventListener('click', addItem);
-
+searchBtn.addEventListener("click", inputFilter)
 // filter categories and products 
