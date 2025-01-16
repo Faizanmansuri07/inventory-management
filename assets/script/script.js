@@ -4,6 +4,7 @@
 
 let imageURL = "";
 let totalAmounts = 0;
+let currId;
 let inventoryId = 100;
 let maxCategory = null;
 let maxValue = -Infinity;
@@ -176,6 +177,8 @@ function renderInventoryTable(product, index) {
     const tr = document.createElement('tr')
     tr.setAttribute('data-status', product.category)
     tr.dataset.index = index
+    currId = index;
+    tr.className = "item"
     tr.innerHTML = `
             <td>${inventoryId++}</td>
             <td>${product.name}</td>
@@ -186,7 +189,7 @@ function renderInventoryTable(product, index) {
             <td>${product.unitprice * product.totalunit} ₹</td>
             <td class="ops">
                 <div class="op" id="op1" onclick="showEditTab(${index})"><ion-icon name="create-outline"></ion-icon></div>
-                <div class="op" id="op2" onclick="removeItem(${index})"><ion-icon name="close-outline"></ion-icon></div>
+                <div class="op" id="op2" onclick="removeItem(this)"><ion-icon name="close-outline"></ion-icon></div>
             </td>
         `;
         if(product.totalunit < 13) {
@@ -235,6 +238,14 @@ function LowInventory(product) {
     `;
     td1body.append(tr)
 }
+
+function removeItem(button) {
+    const li = button.closest(".item")
+    li.remove();
+    products.splice(li.dataset.value, 1)
+    console.log(products)
+}
+
 
 function filterInventory(e) {
     const selectValue = selectoption.value;
