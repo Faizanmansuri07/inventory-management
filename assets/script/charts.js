@@ -12,7 +12,7 @@ function renderChart(globalData) {
           title: 'Categories value',
           pieStartAngle: 100,
           width: '100%', // Let the chart adapt to the container's width
-          height: 200, // Fixed height
+          height: 170, // Fixed height
         };
   
         const chart = new google.visualization.PieChart(document.getElementById('piechart'));

@@ -6,7 +6,47 @@
     /* border: 2px solid; */
     transition: 0.7s;
 }
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 5px; /* Width of the scrollbar */
+    height: 12px; /* Height of the scrollbar (for horizontal scrollbar) */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light background for the track */
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #d0d0d0; /* Darker thumb color on hover */
 
+    border-radius: 10px;
+    transition: background 0.3s ease; /* Smooth transition for thumb color */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #d0d0d0; /* Darker thumb color on hover */
+  }
+  
+  /* Optional: For horizontal scrollbars */
+  ::-webkit-scrollbar-horizontal {
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track-horizontal {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb-horizontal {
+    background: #888;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb-horizontal:hover {
+    background: #555;
+  }
+  
 .none {
     display: none;
 }
@@ -343,12 +383,12 @@ graphs
 }
 
 .right-container .graphs .pi-chart {
-    width: 18%;
+    width: 20%;
     height: 350px;
     background-color: #fff;
     margin-top: 20px;
     border-radius: 13px;
-    padding: 10px 20px;
+    padding: 10px 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
 }
@@ -374,13 +414,21 @@ graphs
     /* align-items: center; */
     /* justify-content: space-between; */
     gap: 10px;
+    /* padding: 0px 10px; */
     overflow: auto;
+    margin-top: 10px;
 }
 
 .right-container .graphs .pi-chart .details .detail {
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    font-size: 14px;
+    background-color:#fff;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 5px;
 }
 
 /* ==================
@@ -656,18 +704,6 @@ add items
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
   /* media query for large device */
 
   @media(max-width : 1290px) {
@@ -755,6 +791,9 @@ add items
 
 
   @media(max-width: 545px) {
+    body{
+        overflow-x: hidden;
+    }
     td {
         font-size: 0.9rem;
     }
