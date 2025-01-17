@@ -163,7 +163,9 @@ popups
         transform: translateX(calc(100% + 20px));
     }
 }
-
+#toti {
+    font-weight: 450;
+}
 
 
 

@@ -9,10 +9,7 @@ let currId;
 let inventoryId = 100;
 let totalAmount = 0
 let totalAmountCateogry = {}
-const products = []
-const globalData = [
-    ['Category', 'Value'], // Include headers for Google Charts
-  ];
+let products = []
 let categories = {}
 const addBtn = document.querySelector("#add")
 const inventoryTableBody = document.querySelector("#in-table-body")
@@ -150,9 +147,8 @@ document.querySelector("#close").addEventListener("click", () => toggleTab.class
 // ====================
 
 // ==> making add item to with some checks 
-
+// ==> making add item to with some checks 
 function addItem() {
-    
     const productsName = document.querySelector("#prName").value
     const categoryName = document.querySelector("#name-ctgry").value
     const perUnitPrice = document.querySelector("#per-price").value
@@ -167,23 +163,37 @@ function addItem() {
             unitprice : perUnitPrice,
             totalunit : totalUnit
         }
-        products.push(product)
-        updateTotal(products)
-        console.log(products);
-        dashboardItems.innerHTML =  products.length;
-        renderInventoryTable(product, products.length-1)
-        createCategories()
-        createPopUp(popupsObj.pop3,imgLink.pop3)
 
+        // Save to products array
+        products.push(product)
+
+        // Store the updated products array in localStorage
+        localStorage.setItem("products", JSON.stringify(products))
+
+        // Re-render the total amount and dashboard
+        updateTotal(products)
+        dashboardItems.innerHTML =  products.length;
+
+        // Render the inventory table
+        renderInventoryTable(product, products.length-1)
+
+        // Re-render categories
+        createCategories()
+
+        // Show success popup
+        createPopUp(popupsObj.pop3, imgLink.pop3)
+
+        // Clear form fields
         document.querySelector("#prName").value = ""
         document.querySelector("#name-ctgry").value = ""
         document.querySelector("#per-price").value = ""
         document.querySelector("#total-unit").value = ""
 
-    }   else {
+    } else {
         createPopUp(popupsObj.pop2, imgLink.pop2);
     }
 }
+
 
 
 // ==> rendering the table for the inventory section
@@ -277,6 +287,21 @@ function LowInventory(product) {
     }
 }
 
+function updateLowInventory() {
+    td1body.innerHTML = ""; // Clear the low-stock table
+    let lowStockCount = 0;
+
+    for (const product of products) {
+        if (product.totalunit <= 15) {
+            LowInventory(product); // Render low-stock product
+            lowStockCount++;
+        }
+    }
+
+    // Update low stock count in the UI
+    countStock.textContent = lowStockCount;
+}
+
 function categoryTotals(items) {
     const amountOfCategory = {}
     items.forEach((item) => {
@@ -289,6 +314,7 @@ function categoryTotals(items) {
         }
     })
     updateDashboard(amountOfCategory);
+    getLineData(amountOfCategory)
 }
 
 function updateDashboard(object) {
@@ -312,27 +338,34 @@ function removeItem(button) {
     const product = products[index];
     const category = product.category;
 
+    // Remove from products array
     products.splice(index, 1);
+
+    // Update localStorage with the new products array
+    localStorage.setItem("products", JSON.stringify(products));
+
+    // Update UI and totals
     dashboardItems.innerHTML =  products.length;
     li.remove();
-
-    updateTotal(products)
+    updateTotal(products);
     createPopUp(popupsObj.pop4, imgLink.pop4);
-    categories[category] -= 1
-    console.log(categories);
-    topCategory(categories)
-    if(categories[category] === 0) {
-        delete categories[category];
-        randerCategories(categories)
-    }
-    countStock.innerHTML = document.querySelectorAll("#td1-tbody tr").length ;
-    updateLowInventory();
-    categoryTotals(products)
-const allRows = document.querySelectorAll('.item');
-allRows.forEach((row, idx) => {
-    row.dataset.index = idx; // Update dataset.index with the new index
-});
+    categories[category] -= 1;
 
+    // Update categories and dashboard
+    topCategory(categories);
+    if (categories[category] === 0) {
+        delete categories[category];
+        randerCategories(categories);
+    }
+    countStock.innerHTML = document.querySelectorAll("#td1-tbody tr").length;
+    updateLowInventory();
+    categoryTotals(products);
+
+    // Re-index remaining products
+    const allRows = document.querySelectorAll('.item');
+    allRows.forEach((row, idx) => {
+        row.dataset.index = idx; // Update dataset.index with the new index
+    });
 }
 
 
@@ -348,49 +381,34 @@ function showEditTab(index) {
 }
 
 function submitEdit(index) {
-    const val = document.querySelector(`#in-table-body tr[data-index="${index}"]`)
+    const val = document.querySelector(`#in-table-body tr[data-index="${index}"]`);
 
     let name = document.querySelector("#name").value;
-    const unit = document.querySelector("#perPrice").value
-    const totalUnit = document.querySelector("#qtyNumber").value
+    const unit = document.querySelector("#perPrice").value;
+    const totalUnit = document.querySelector("#qtyNumber").value;
 
+    if (name && unit && totalUnit) {
+        val.querySelector("td:nth-child(2)").textContent = name;
+        val.querySelector("td:nth-child(4)").textContent = `${unit} ₹`;
+        val.querySelector("td:nth-child(6)").textContent = totalUnit;
+        val.querySelector("td:nth-child(7)").textContent = `${unit * totalUnit} ₹`;
 
-    if(name && unit && totalUnit) {
-    console.log(val.querySelector("td:nth-child(2)").textContent);
-    
-    val.querySelector("td:nth-child(2)").textContent = name;
-    val.querySelector("td:nth-child(4)").textContent = `${unit} ₹`;
-    val.querySelector("td:nth-child(6)").textContent = totalUnit;
-    val.querySelector("td:nth-child(7)").textContent = `${unit * totalUnit} ₹`;
-    console.log(products);
+        // Update the product object
+        products[index].name = name;
+        products[index].unitprice = parseFloat(unit);
+        products[index].totalunit = parseInt(totalUnit, 10);
 
-    products[index].name = name;
-    products[index].unitprice = parseFloat(unit);
-    products[index].totalunit = parseInt(totalUnit, 10); 
-    
-    // td1body.innerHTML = ""
-    updateLowInventory();
-    updateTotal(products)
-    categoryTotals(products)
-    createPopUp("item edited succesfully", imgLink.pop3);
-    }   else {
+        // Update the localStorage
+        localStorage.setItem("products", JSON.stringify(products));
+
+        // Update other sections
+        updateLowInventory();
+        updateTotal(products);
+        categoryTotals(products);
+        createPopUp("Item edited successfully", imgLink.pop3);
+    } else {
         createPopUp(popupsObj.pop2, imgLink.pop2);
     }
-}
-
-function updateLowInventory() {
-    td1body.innerHTML = ""; // Clear the low-stock table
-    let lowStockCount = 0;
-
-    for (const product of products) {
-        if (product.totalunit <= 15) {
-            LowInventory(product); // Render low-stock product
-            lowStockCount++;
-        }
-    }
-
-    // Update low stock count in the UI
-    countStock.textContent = lowStockCount;
 }
 
 
@@ -469,14 +487,70 @@ searchBtn.addEventListener("click", inputFilter)
 // charts
 // ===========================
 function getChartData(obj) {
+    const globalData = [
+        ['Category', 'Value'], // Include headers for Google Charts
+      ];
     for (const key in obj) {
         globalData.push([key, obj[key]])
     }
     console.log(globalData);
-    renderChart()
+    renderChart(globalData)
 }
 
 // Define global data
 
   console.log('main.js loaded. globalData is now available.');
   
+function getLineData(obj) {
+    const lineData = [
+        ['category', 'Amount'],
+    ]
+    for (const key in obj) {
+        lineData.push([key, obj[key]])
+    }
+    renderLineChart(lineData)
+}
+
+// ================
+// local Storage
+// ================
+
+function saveToLocalStorage() {
+    localStorage.setItem("products", JSON.stringify(products));
+}
+
+function loadFromLocalStorage() {
+    const storedProducts = localStorage.getItem("products");
+    if (storedProducts) {
+        products = JSON.parse(storedProducts);
+        // Render the inventory table and other elements using the loaded products
+        products.forEach((product, index) => {
+            renderInventoryTable(product, index);
+        });
+        createCategories();
+    }
+}
+
+// Load products from localStorage on page load
+window.addEventListener("load", () => {
+    const storedProducts = JSON.parse(localStorage.getItem("products"));
+    if (storedProducts && storedProducts.length > 0) {
+        products = storedProducts; // Update products array with stored data
+        products.forEach((product, index) => {
+            renderInventoryTable(product, index); // Re-render the inventory table
+        });
+        updateTotal(products); // Update total amount
+        createCategories(); // Re-create categories
+        dashboardItems.innerHTML = products.length; // Update dashboard count
+    }
+
+    // Select the "Dashboard" icon by default on window load
+    const homeIcon = Array.from(icons).find(icon => {
+        const text = icon.querySelector(".icon-name").innerText.trim();
+        return text.toLowerCase() === "dashboard";
+    });
+    if (homeIcon) {
+        homeIcon.classList.add('left-tab-toggle');
+        document.querySelector(".sub-right").style.display = "block";
+    }
+});

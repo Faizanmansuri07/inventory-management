@@ -16,30 +16,6 @@
 
     <!-- line -chart -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Categories', 'Total no. of items'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
-
-        var options = {
-          title: 'Inventory Details',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
-      }
-    </script>
 
     <!-- pi-chart -->
 
@@ -154,6 +130,7 @@
                             </div>
                             <div class="pi-chart">
                                 <div id="piechart" class="pi"></div>
+                                <p id="toti">Total  of categories :</p>
                                 <div class="details">
                                       <!-- renderind details to the dashboard using javascript -->
                                 </div>
