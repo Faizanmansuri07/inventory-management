@@ -7,10 +7,12 @@ let topKey = "";
 let topVal = 0;
 let currId;
 let inventoryId = 100;
-let maxCategory = null;
-let maxValue = -Infinity;
 let totalAmount = 0
+let totalAmountCateogry = {}
 const products = []
+const globalData = [
+    ['Category', 'Value'], // Include headers for Google Charts
+  ];
 let categories = {}
 const addBtn = document.querySelector("#add")
 const inventoryTableBody = document.querySelector("#in-table-body")
@@ -206,6 +208,7 @@ function renderInventoryTable(product, index) {
             </td>
         `;
         LowInventory(product)
+        categoryTotals(products)
         inventoryTableBody.appendChild(tr);
         console.log(tr);
 }
@@ -234,10 +237,13 @@ function randerCategories(categories) {
         selectoption.append(option)
     }
         topCategory(categories)
+        getChartData(categories)
         countCategory.innerHTML = Object.entries(categories).length;
 }
 
 function topCategory(categories) {
+    topVal = 0
+    topKey = ""
     for (const key in categories) {
        if(categories[key] > topVal) {
         topVal = categories[key]
@@ -248,7 +254,7 @@ function topCategory(categories) {
     if(Object.entries(categories).length === 0) {
         countTopCategory.innerHTML = ""
     }   else {
-    countTopCategory.innerHTML = topKey
+    countTopCategory.innerHTML = `${topKey} (ctg)`
     }
 }
 
@@ -271,6 +277,35 @@ function LowInventory(product) {
     }
 }
 
+function categoryTotals(items) {
+    const amountOfCategory = {}
+    items.forEach((item) => {
+        const category = item.category
+        if(amountOfCategory[category]) {
+            amountOfCategory[category]  += (item.unitprice * item.totalunit)
+
+        }   else {
+            amountOfCategory[category] = item.unitprice * item.totalunit
+        }
+    })
+    updateDashboard(amountOfCategory);
+}
+
+function updateDashboard(object) {
+    details.innerHTML = ""
+    for (const key in object) {
+        const detail = document.createElement("div")
+        detail.classList.add("detail")
+        detail.innerHTML = `
+            <p>${key}</p>
+            <p>${object[key]} ₹</p>
+        `;
+        details.append(detail)
+    }
+}
+
+
+
 function removeItem(button) {
     const li = button.closest(".item");
     const index = li.dataset.index;
@@ -285,13 +320,14 @@ function removeItem(button) {
     createPopUp(popupsObj.pop4, imgLink.pop4);
     categories[category] -= 1
     console.log(categories);
+    topCategory(categories)
     if(categories[category] === 0) {
         delete categories[category];
         randerCategories(categories)
     }
     countStock.innerHTML = document.querySelectorAll("#td1-tbody tr").length ;
     updateLowInventory();
-
+    categoryTotals(products)
 const allRows = document.querySelectorAll('.item');
 allRows.forEach((row, idx) => {
     row.dataset.index = idx; // Update dataset.index with the new index
@@ -335,6 +371,7 @@ function submitEdit(index) {
     // td1body.innerHTML = ""
     updateLowInventory();
     updateTotal(products)
+    categoryTotals(products)
     createPopUp("item edited succesfully", imgLink.pop3);
     }   else {
         createPopUp(popupsObj.pop2, imgLink.pop2);
@@ -426,3 +463,20 @@ selectoption.addEventListener('change', (e) => {
 addBtn.addEventListener('click', addItem);
 searchBtn.addEventListener("click", inputFilter)
 // filter categories and products 
+
+
+// ===========================
+// charts
+// ===========================
+function getChartData(obj) {
+    for (const key in obj) {
+        globalData.push([key, obj[key]])
+    }
+    console.log(globalData);
+    renderChart()
+}
+
+// Define global data
+
+  console.log('main.js loaded. globalData is now available.');
+  
